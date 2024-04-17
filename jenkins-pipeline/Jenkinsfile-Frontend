@@ -27,7 +27,7 @@ pipeline {
                 dir('app/frontend') {
                     withSonarQubeEnv('sonar-server') {
                         sh """
-                            ${SCANNERHOME}/bin/sonar-scanner \
+                            ${SCANNER_HOME}/bin/sonar-scanner \
                             -Dsonar.projectName=devsecops-frontend \
                             -Dsonar.projectKey=devsecops-frontend
                         """
