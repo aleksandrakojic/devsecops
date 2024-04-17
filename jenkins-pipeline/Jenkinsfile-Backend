@@ -5,7 +5,7 @@ pipeline {
         nodejs 'nodejs'
     }
     environment  {
-        SCANNER_HOME=tool 'sonar-scanner'
+        SCANNERHOME = tool 'sonar-scanner'
         AWS_ACCOUNT_ID = credentials('ACCOUNT_ID')
         AWS_ECR_REPO_NAME = credentials('ECR_BACK')
         AWS_DEFAULT_REGION = 'eu-west-3'
@@ -26,9 +26,11 @@ pipeline {
             steps {
                 dir('app/backend') {
                     withSonarQubeEnv('sonar-server') {
-                        sh ''' $SCANNER_HOME/bin/sonar-scanner \
-                        -Dsonar.projectName=webapp-backend \
-                        -Dsonar.projectKey=webapp-backend '''
+                        sh """
+                            ${SCANNERHOME}/bin/sonar-scanner \
+                            -Dsonar.projectName=devsecops-backend \
+                            -Dsonar.projectKey=devsecops-backend
+                        """
                     }
                 }
             }
@@ -80,11 +82,6 @@ pipeline {
                 sh 'trivy image ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER} > trivyimage.txt' 
             }
         }
-        stage('Checkout Code') {
-            steps {
-                git credentialsId: 'GITHUB', url: 'https://github.com/aleksandrakojic/devsecops.git'
-            }
-        }
         stage('Update Deployment file') {
             environment {
                 GIT_REPO_NAME = "devsecops"
@@ -103,7 +100,7 @@ pipeline {
                             sed -i "s/${AWS_ECR_REPO_NAME}:${imageTag}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}/" deployment.yaml
                             git add deployment.yaml
                             git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
-                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
+                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                         '''
                     }
                 }
