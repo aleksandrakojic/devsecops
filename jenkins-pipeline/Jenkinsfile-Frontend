@@ -26,9 +26,11 @@ pipeline {
             steps {
                 dir('app/frontend') {
                     withSonarQubeEnv('sonar-server') {
-                        sh ''' $SCANNER_HOME/bin/sonar-scanner \
-                        -Dsonar.projectName=webapp-frontend \
-                        -Dsonar.projectKey=webapp-frontend '''
+                        sh """
+                            ${SCANNERHOME}/bin/sonar-scanner \
+                            -Dsonar.projectName=devsecops-frontend \
+                            -Dsonar.projectKey=devsecops-frontend
+                        """
                     }
                 }
             }
@@ -78,11 +80,6 @@ pipeline {
         stage("TRIVY Image Scan") {
             steps {
                 sh 'trivy image ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER} > trivyimage.txt' 
-            }
-        }
-        stage('Checkout Code') {
-            steps {
-                git credentialsId: 'GITHUB', url: 'https://github.com/aleksandrakojic/devsecops.git'
             }
         }
         stage('Update Deployment file') {
