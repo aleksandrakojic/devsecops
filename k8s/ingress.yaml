@@ -7,6 +7,11 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/healthcheck-path: /healthz
+    alb.ingress.kubernetes.io/load-balancer-name: a784443789505482d8afc27a51305498-144600292.eu-west-3.elb.amazonaws.com
+    alb.ingress.kubernetes.io/group.name: underdogdevops.net
+    alb.ingress.kubernetes.io/group.order: '10'
 spec:
   ingressClassName: alb
   rules:
