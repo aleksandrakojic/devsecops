@@ -91,7 +91,7 @@ pipeline {
                 GIT_USER_NAME = "aleksandrakojic"
             }
             steps {
-                dir('k8s/Frontend') {
+                dir('k8s/frontend') {
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                         sh '''
                             git config user.email "alexandra.kojic@gmail.com"
